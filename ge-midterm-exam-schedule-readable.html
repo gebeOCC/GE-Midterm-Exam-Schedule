@@ -1,0 +1,3237 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>GE Midterm Exam Schedule</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700&family=Instrument+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        /* =========================================================
+           Theme
+           ========================================================= */
+        :root {
+            --background: #EDF1F6;
+            --card: #FFFFFF;
+            --text: #13202E;
+            --muted-text: #566678;
+            --border: #D3DBE5;
+            --accent: #1D4ED8;
+            --accent-text: #FFFFFF;
+            --empty-cell: #F4F6F9;
+
+            --subject-saturation: 72%;
+            --subject-lightness: 91%;
+            --subject-border-lightness: 44%;
+
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --background: #0E141B;
+                --card: #151D27;
+                --text: #E7EDF4;
+                --muted-text: #93A2B4;
+                --border: #263241;
+                --accent: #7DA2FF;
+                --accent-text: #0E141B;
+                --empty-cell: #111922;
+
+                --subject-saturation: 38%;
+                --subject-lightness: 24%;
+                --subject-border-lightness: 62%;
+            }
+        }
+
+        :root[data-theme="dark"] {
+            --background: #0E141B;
+            --card: #151D27;
+            --text: #E7EDF4;
+            --muted-text: #93A2B4;
+            --border: #263241;
+            --accent: #7DA2FF;
+            --accent-text: #0E141B;
+            --empty-cell: #111922;
+
+            --subject-saturation: 38%;
+            --subject-lightness: 24%;
+            --subject-border-lightness: 62%;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-padding-top: env(safe-area-inset-top, 0px);
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        body {
+            margin: 0;
+            background: var(--background);
+            color: var(--text);
+            font: 15px/1.4 "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+        }
+
+        main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 20px 16px 32px;
+        }
+
+        h1 {
+            margin: 0;
+            font: 700 clamp(26px, 4.2vw, 40px)/1.05 "Bricolage Grotesque",
+                "Instrument Sans", system-ui, sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        header p {
+            margin: 6px 0 18px;
+            color: var(--muted-text);
+        }
+
+        /* =========================================================
+           Day tabs
+           ========================================================= */
+        .day-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .day-tabs button {
+            flex: 1 1 0;
+            max-width: 270px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--card);
+            color: var(--text);
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .day-tabs button[aria-pressed="true"] {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--accent-text);
+        }
+
+        .day-tabs span {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .day-tabs i {
+            margin-left: auto;
+            padding: 1px 8px;
+            border-radius: 999px;
+            background: color-mix(in srgb, currentColor 16%, transparent);
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 600;
+        }
+
+        /* =========================================================
+           Filters
+           ========================================================= */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        select {
+            flex: 1 1 170px;
+            max-width: 260px;
+            min-width: 0;
+            padding: 9px 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--text);
+            font: inherit;
+        }
+
+        .reset-button {
+            padding: 9px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: none;
+            color: var(--accent);
+            font: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* =========================================================
+           Stats and subject legend
+           ========================================================= */
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 18px;
+            margin-bottom: 10px;
+            color: var(--muted-text);
+            font-size: 13.5px;
+        }
+
+        .stats b {
+            color: var(--text);
+            font-size: 15px;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .subject-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: var(--card);
+            color: var(--text);
+            font: inherit;
+            font-size: 12.5px;
+            cursor: pointer;
+        }
+
+        .subject-chip::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            background: hsl(var(--subject-hue) 62% var(--subject-border-lightness));
+        }
+
+        .subject-chip[aria-pressed="true"] {
+            outline: 2px solid hsl(var(--subject-hue) 62% var(--subject-border-lightness));
+            outline-offset: 1px;
+        }
+
+        /* =========================================================
+           Schedule board
+           ========================================================= */
+        .schedule-board {
+            overflow: auto;
+            max-height: 76vh;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--card);
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 104px repeat(6, minmax(184px, 1fr));
+            min-width: 1210px;
+        }
+
+        .schedule-grid > * {
+            border: 0;
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .grid-header {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            padding: 10px 12px;
+            background: var(--card);
+            font-weight: 600;
+        }
+
+        .grid-header small {
+            color: var(--muted-text);
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .corner-header {
+            left: 0;
+            z-index: 4;
+        }
+
+        .room-button {
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            padding: 0 12px;
+            background: var(--card);
+            color: var(--text);
+            font: inherit;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .room-button:hover {
+            color: var(--accent);
+        }
+
+        .exam-card {
+            min-width: 0;
+            min-height: 72px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1px;
+            padding: 8px 10px 8px 14px;
+            background: hsl(
+                var(--subject-hue)
+                var(--subject-saturation)
+                var(--subject-lightness)
+            );
+            box-shadow: inset 4px 0 0
+                hsl(var(--subject-hue) 62% var(--subject-border-lightness));
+        }
+
+        .exam-card.is-dimmed {
+            opacity: 0.2;
+        }
+
+        .empty-slot {
+            background: var(--empty-cell);
+        }
+
+        .filter-link {
+            padding: 0;
+            border: 0;
+            background: none;
+            color: inherit;
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .filter-link:hover {
+            text-decoration: underline;
+        }
+
+        .exam-card .filter-link:first-child {
+            font-size: 14.5px;
+            font-weight: 700;
+        }
+
+        .exam-card .filter-link:nth-child(2) {
+            font-size: 12.5px;
+            opacity: 0.85;
+        }
+
+        .exam-card em {
+            max-width: 100%;
+            margin-top: auto;
+            overflow: hidden;
+            color: inherit;
+            font-size: 11.5px;
+            font-style: normal;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            opacity: 0.75;
+        }
+
+        .empty-message {
+            padding: 40px 16px;
+            color: var(--muted-text);
+            text-align: center;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <header>
+            <h1>GE Midterm Exam Schedule</h1>
+            <p>Monday, October 5 and Tuesday, October 6, 2026</p>
+        </header>
+
+        <nav id="dayTabs" class="day-tabs" aria-label="Exam day"></nav>
+
+        <section class="filters" aria-label="Schedule filters">
+            <select id="proctorFilter" aria-label="Proctor"></select>
+            <select id="roomFilter" aria-label="Room"></select>
+            <select id="sectionFilter" aria-label="Section"></select>
+
+            <button
+                id="resetFilters"
+                class="reset-button"
+                type="button"
+                data-action="reset-filters"
+                hidden
+            >
+                Reset filters
+            </button>
+        </section>
+
+        <div id="scheduleStats" class="stats"></div>
+        <div id="subjectLegend" class="legend"></div>
+        <div id="scheduleBoard" class="schedule-board"></div>
+    </main>
+
+    <script>
+        /* =========================================================
+           Raw schedule data
+
+           Each row uses this compact format:
+           [
+               dayIndex,
+               timeSlotIndex,
+               subjectIndex,
+               section,
+               proctor,
+               room
+           ]
+
+           We immediately convert the rows into objects below so the
+           rest of the application can use readable property names.
+           ========================================================= */
+        const scheduleData = {
+            "days": [
+                        {
+                                    "tab": "Day 1",
+                                    "date": "Mon, Oct 5"
+                        },
+                        {
+                                    "tab": "Day 2",
+                                    "date": "Tue, Oct 6"
+                        }
+            ],
+            "slots": [
+                        "8:00–9:30 AM",
+                        "9:30–11:00 AM",
+                        "11:00 AM–12:30 PM",
+                        "12:30–2:00 PM",
+                        "2:00–3:30 PM",
+                        "3:30–5:00 PM"
+            ],
+            "subjects": [
+                        "Movement Competency Training",
+                        "Dance Sports, Group Exercises, Outdoor and Adventurous",
+                        "Rhythmic Activities",
+                        "Gender and Society with Peace Education",
+                        "Art Appreciation",
+                        "Good Manners and Right Conduct",
+                        "Life and Works of Rizal",
+                        "Science, Technology and Society",
+                        "Human Reproduction",
+                        "English Remediation",
+                        "Purposive Communication",
+                        "Ethics",
+                        "Mathematics in the Modern World",
+                        "Understanding the Self",
+                        "Philippine Indigenous Communities",
+                        "People and the Earth's Ecosystems",
+                        "The Contemporary World",
+                        "Readings in the Philippine History with IP Education"
+            ],
+            "rows": [
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSIT 1-A",
+                                    "Abaring, Elizandro O.",
+                                    "202"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSIT 1-B",
+                                    "Alcancia, Angela A.",
+                                    "203"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSIT 1-C",
+                                    "Bulawit, Pauline Mitch B.",
+                                    "205"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSIT 1-D",
+                                    "Colinares, Jay Ann P.",
+                                    "206"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSIT 1-E",
+                                    "Dalondonan, Glaicel D.",
+                                    "207"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSIT 1-F",
+                                    "Dalura, Almira M.",
+                                    "208"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSIT 1-G",
+                                    "Felicilda, Isy M.",
+                                    "209"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSIT 1-H",
+                                    "Galagnara, Noelle Phyllis T.",
+                                    "210"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSIT 1-I",
+                                    "Kinapundan, Jocel Mae A.",
+                                    "211"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSIT 1-K",
+                                    "Lacdagan, Jesson Mark C.",
+                                    "214"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSIT 1-L",
+                                    "Macahilos, Angeline M.",
+                                    "215"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSIT 1-M",
+                                    "Obsioma, Emilyn C.",
+                                    "301"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BEED 1A",
+                                    "Paborada, John Rextel M.",
+                                    "302"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BEED 1B",
+                                    "Panoncio, Ken Advil A.",
+                                    "303"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BEED 1C",
+                                    "Pepito, Katrina Zeta S.",
+                                    "305"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BEED 1D",
+                                    "Regoya, Ryan Kim D.",
+                                    "306"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BEED 1F",
+                                    "Saavedra, Jerson M.",
+                                    "307"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSED 1A",
+                                    "Tumapon, Shayne B.",
+                                    "308"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSED 1B",
+                                    "Udarbe, Krisha R.",
+                                    "309"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSED 1C",
+                                    "Velasquez, Niel M.",
+                                    "310"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSED 1D",
+                                    "Apdian, Cristene Joy A.",
+                                    "311"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSED 1F",
+                                    "Aque, Angely S.",
+                                    "312"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSBA FM 1A",
+                                    "Arancana, Mhafaith Grace C.",
+                                    "313"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSBA FM 1B",
+                                    "Baculina, Mira O.",
+                                    "AVR"
+                        ],
+                        [
+                                    0,
+                                    0,
+                                    0,
+                                    "BSBA FM 1C",
+                                    "Baguio, Marikit T.",
+                                    "Conference Room"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    0,
+                                    "BSBA FM 1D",
+                                    "Cagas, Steffany V.",
+                                    "202"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    0,
+                                    "BSBA FM 1E",
+                                    "Decenilla, Maybelle C.",
+                                    "203"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    0,
+                                    "BSBA FM 1F",
+                                    "Fabria, Liezel N.",
+                                    "205"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    0,
+                                    "BSBA FM 1G",
+                                    "Farenas, Kristine Mae M.",
+                                    "206"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    0,
+                                    "BSBA FM 1H",
+                                    "Fuentes, Cyra Jel C.",
+                                    "207"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    0,
+                                    "BSBA FM 1I",
+                                    "Hilot, Jemar R.",
+                                    "208"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    0,
+                                    "BSBA MM 1A",
+                                    "Jampit, Jelou L.",
+                                    "209"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    0,
+                                    "BSBA MM 1B",
+                                    "Kinapundan, Riza Jean D.",
+                                    "210"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    0,
+                                    "BSBA MM 1C",
+                                    "Lagrosas, Anna Lou M.",
+                                    "211"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    0,
+                                    "BSBA MM 1D",
+                                    "Mabaylan, Lani B.",
+                                    "214"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    0,
+                                    "BSBA MM 1E",
+                                    "Mabilin, Ivee S.",
+                                    "215"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    0,
+                                    "BSBA MM 1F",
+                                    "Melendez, Ashley Jam L.",
+                                    "301"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    0,
+                                    "BSBA MM 1H",
+                                    "Suico, Judith S.",
+                                    "302"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    0,
+                                    "BSBA MM 1I",
+                                    "Tabalba, Mary Jean B.",
+                                    "303"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    1,
+                                    "BSIT 2A",
+                                    "Toong, Nikki Collaine B.",
+                                    "305"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    1,
+                                    "BSIT 2B",
+                                    "Unajan, Erica C.",
+                                    "306"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    1,
+                                    "BSIT 2C",
+                                    "Abaring, Elizandro O.",
+                                    "307"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    1,
+                                    "BSIT 2D",
+                                    "Alcancia, Angela A.",
+                                    "308"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    1,
+                                    "BSIT 2E",
+                                    "Bulawit, Pauline Mitch B.",
+                                    "309"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    1,
+                                    "BSIT 2F",
+                                    "Colinares, Jay Ann P.",
+                                    "310"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    1,
+                                    "BEED 2A",
+                                    "Dalondonan, Glaicel D.",
+                                    "311"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    1,
+                                    "BEED 2B",
+                                    "Dalura, Almira M.",
+                                    "312"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    1,
+                                    "BEED 2C",
+                                    "Felicilda, Isy M.",
+                                    "313"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    1,
+                                    "BEED 2D",
+                                    "Galagnara, Noelle Phyllis T.",
+                                    "AVR"
+                        ],
+                        [
+                                    0,
+                                    1,
+                                    1,
+                                    "BSED 2A",
+                                    "Kinapundan, Jocel Mae A.",
+                                    "Conference Room"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    1,
+                                    "BSED 2B",
+                                    "Lacdagan, Jesson Mark C.",
+                                    "202"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    1,
+                                    "BSED 2C",
+                                    "Macahilos, Angeline M.",
+                                    "203"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    1,
+                                    "BSED 2D",
+                                    "Obsioma, Emilyn C.",
+                                    "205"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    2,
+                                    "BSBA FM 2A",
+                                    "Paborada, John Rextel M.",
+                                    "206"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    2,
+                                    "BSBA FM 2B",
+                                    "Panoncio, Ken Advil A.",
+                                    "207"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    2,
+                                    "BSBA FM 2C",
+                                    "Pepito, Katrina Zeta S.",
+                                    "208"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    2,
+                                    "BSBA FM 2D",
+                                    "Regoya, Ryan Kim D.",
+                                    "209"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    2,
+                                    "BSBA FM 2E",
+                                    "Saavedra, Jerson M.",
+                                    "210"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    2,
+                                    "BSBA FM 2F",
+                                    "Tumapon, Shayne B.",
+                                    "211"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    2,
+                                    "BSBA MM 2A",
+                                    "Udarbe, Krisha R.",
+                                    "214"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    2,
+                                    "BSBA MM 2B",
+                                    "Velasquez, Niel M.",
+                                    "215"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    2,
+                                    "BSBA MM 2C",
+                                    "Apdian, Cristene Joy A.",
+                                    "301"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    2,
+                                    "BSBA MM 2D",
+                                    "Aque, Angely S.",
+                                    "302"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    2,
+                                    "BSBA MM 2E",
+                                    "Arancana, Mhafaith Grace C.",
+                                    "303"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    2,
+                                    "BSBA MM 2F",
+                                    "Baculina, Mira O.",
+                                    "305"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    3,
+                                    "BEED 3A",
+                                    "Baguio, Marikit T.",
+                                    "306"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    3,
+                                    "BEED 3B",
+                                    "Cagas, Steffany V.",
+                                    "307"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    3,
+                                    "BSBA FM 3A",
+                                    "Decenilla, Maybelle C.",
+                                    "308"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    3,
+                                    "BSBA FM 3B",
+                                    "Fabria, Liezel N.",
+                                    "309"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    3,
+                                    "BSBA FM 3C",
+                                    "Farenas, Kristine Mae M.",
+                                    "310"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    3,
+                                    "BSBA FM 3D",
+                                    "Fuentes, Cyra Jel C.",
+                                    "311"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    3,
+                                    "BSBA MM 3A",
+                                    "Hilot, Jemar R.",
+                                    "312"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    3,
+                                    "BSBA MM 3B",
+                                    "Jampit, Jelou L.",
+                                    "313"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    3,
+                                    "BSBA MM 3C",
+                                    "Kinapundan, Riza Jean D.",
+                                    "AVR"
+                        ],
+                        [
+                                    0,
+                                    2,
+                                    3,
+                                    "BSBA MM 3D",
+                                    "Lagrosas, Anna Lou M.",
+                                    "Conference Room"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    3,
+                                    "BSBA MM 3E",
+                                    "Mabaylan, Lani B.",
+                                    "202"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    3,
+                                    "BSBA MM 3F",
+                                    "Mabilin, Ivee S.",
+                                    "203"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    3,
+                                    "BSED 3A",
+                                    "Melendez, Ashley Jam L.",
+                                    "205"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    3,
+                                    "BSED 3B",
+                                    "Suico, Judith S.",
+                                    "206"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSIT 2A",
+                                    "Tabalba, Mary Jean B.",
+                                    "207"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSIT 2B",
+                                    "Toong, Nikki Collaine B.",
+                                    "208"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSIT 2C",
+                                    "Unajan, Erica C.",
+                                    "209"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSIT 2D",
+                                    "Abaring, Elizandro O.",
+                                    "210"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSIT 2E",
+                                    "Alcancia, Angela A.",
+                                    "211"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSIT 2F",
+                                    "Bulawit, Pauline Mitch B.",
+                                    "214"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BEED 3A",
+                                    "Colinares, Jay Ann P.",
+                                    "215"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BEED 3B",
+                                    "Dalondonan, Glaicel D.",
+                                    "301"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSBA FM 2A",
+                                    "Dalura, Almira M.",
+                                    "302"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSBA FM 2B",
+                                    "Felicilda, Isy M.",
+                                    "303"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSBA FM 2C",
+                                    "Galagnara, Noelle Phyllis T.",
+                                    "305"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSBA FM 2D",
+                                    "Kinapundan, Jocel Mae A.",
+                                    "306"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSBA FM 2E",
+                                    "Lacdagan, Jesson Mark C.",
+                                    "307"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSBA FM 2F",
+                                    "Macahilos, Angeline M.",
+                                    "308"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSBA MM 2A",
+                                    "Obsioma, Emilyn C.",
+                                    "309"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSBA MM 2B",
+                                    "Paborada, John Rextel M.",
+                                    "310"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSBA MM 2C",
+                                    "Panoncio, Ken Advil A.",
+                                    "311"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSBA MM 2D",
+                                    "Pepito, Katrina Zeta S.",
+                                    "312"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSBA MM 2E",
+                                    "Regoya, Ryan Kim D.",
+                                    "313"
+                        ],
+                        [
+                                    0,
+                                    3,
+                                    4,
+                                    "BSBA MM 2F",
+                                    "Saavedra, Jerson M.",
+                                    "AVR"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    4,
+                                    "BSED 3A",
+                                    "Tumapon, Shayne B.",
+                                    "Speech Lab"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    4,
+                                    "BSED 3B",
+                                    "Udarbe, Krisha R.",
+                                    "202"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    5,
+                                    "BSIT 1-A",
+                                    "Velasquez, Niel M.",
+                                    "203"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    5,
+                                    "BSIT 1-B",
+                                    "Apdian, Cristene Joy A.",
+                                    "205"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    5,
+                                    "BSIT 1-C",
+                                    "Aque, Angely S.",
+                                    "206"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    5,
+                                    "BSIT 1-D",
+                                    "Arancana, Mhafaith Grace C.",
+                                    "207"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    5,
+                                    "BSIT 1-E",
+                                    "Baculina, Mira O.",
+                                    "208"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    5,
+                                    "BSIT 1-F",
+                                    "Baguio, Marikit T.",
+                                    "209"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    5,
+                                    "BSIT 1-G",
+                                    "Cagas, Steffany V.",
+                                    "210"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    5,
+                                    "BSIT 1-H",
+                                    "Decenilla, Maybelle C.",
+                                    "211"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    5,
+                                    "BSIT 1-I",
+                                    "Fabria, Liezel N.",
+                                    "214"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    5,
+                                    "BSIT 1-K",
+                                    "Farenas, Kristine Mae M.",
+                                    "215"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    5,
+                                    "BSIT 1-L",
+                                    "Fuentes, Cyra Jel C.",
+                                    "301"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    5,
+                                    "BSIT 1-M",
+                                    "Hilot, Jemar R.",
+                                    "302"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    6,
+                                    "BEED 3A",
+                                    "Jampit, Jelou L.",
+                                    "303"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    6,
+                                    "BEED 3B",
+                                    "Kinapundan, Riza Jean D.",
+                                    "305"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    6,
+                                    "BSBA FM 3A",
+                                    "Lagrosas, Anna Lou M.",
+                                    "306"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    6,
+                                    "BSBA FM 3B",
+                                    "Mabaylan, Lani B.",
+                                    "307"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    6,
+                                    "BSBA FM 3C",
+                                    "Mabilin, Ivee S.",
+                                    "308"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    6,
+                                    "BSBA FM 3D",
+                                    "Melendez, Ashley Jam L.",
+                                    "309"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    6,
+                                    "BSBA MM 3A",
+                                    "Suico, Judith S.",
+                                    "310"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    6,
+                                    "BSBA MM 3B",
+                                    "Tabalba, Mary Jean B.",
+                                    "311"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    6,
+                                    "BSBA MM 3C",
+                                    "Toong, Nikki Collaine B.",
+                                    "312"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    6,
+                                    "BSBA MM 3D",
+                                    "Unajan, Erica C.",
+                                    "313"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    6,
+                                    "BSBA MM 3E",
+                                    "Abaring, Elizandro O.",
+                                    "AVR"
+                        ],
+                        [
+                                    0,
+                                    4,
+                                    6,
+                                    "BSBA MM 3F",
+                                    "Alcancia, Angela A.",
+                                    "Conference Room"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSIT 2A",
+                                    "Bulawit, Pauline Mitch B.",
+                                    "203"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSIT 2B",
+                                    "Colinares, Jay Ann P.",
+                                    "205"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSIT 2C",
+                                    "Dalondonan, Glaicel D.",
+                                    "206"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSIT 2D",
+                                    "Dalura, Almira M.",
+                                    "207"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSIT 2E",
+                                    "Felicilda, Isy M.",
+                                    "208"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSIT 2F",
+                                    "Galagnara, Noelle Phyllis T.",
+                                    "209"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BEED 2A",
+                                    "Kinapundan, Jocel Mae A.",
+                                    "210"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BEED 2B",
+                                    "Lacdagan, Jesson Mark C.",
+                                    "211"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BEED 2C",
+                                    "Macahilos, Angeline M.",
+                                    "214"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BEED 2D",
+                                    "Obsioma, Emilyn C.",
+                                    "215"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSBA FM 2A",
+                                    "Paborada, John Rextel M.",
+                                    "301"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSBA FM 2B",
+                                    "Panoncio, Ken Advil A.",
+                                    "302"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSBA FM 2C",
+                                    "Pepito, Katrina Zeta S.",
+                                    "303"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSBA FM 2D",
+                                    "Regoya, Ryan Kim D.",
+                                    "305"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSBA FM 2E",
+                                    "Saavedra, Jerson M.",
+                                    "306"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSBA FM 2F",
+                                    "Tumapon, Shayne B.",
+                                    "307"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSBA MM 2A",
+                                    "Udarbe, Krisha R.",
+                                    "308"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSBA MM 2B",
+                                    "Velasquez, Niel M.",
+                                    "309"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSBA MM 2C",
+                                    "Apdian, Cristene Joy A.",
+                                    "310"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSBA MM 2D",
+                                    "Aque, Angely S.",
+                                    "311"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSBA MM 2E",
+                                    "Arancana, Mhafaith Grace C.",
+                                    "312"
+                        ],
+                        [
+                                    0,
+                                    5,
+                                    7,
+                                    "BSBA MM 2F",
+                                    "Baculina, Mira O.",
+                                    "313"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    8,
+                                    "BEED 3A",
+                                    "Baguio, Marikit T.",
+                                    "202"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    8,
+                                    "BEED 3B",
+                                    "Cagas, Steffany V.",
+                                    "203"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    9,
+                                    "BSIT 1-A",
+                                    "Decenilla, Maybelle C.",
+                                    "205"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    9,
+                                    "BSIT 1-B",
+                                    "Fabria, Liezel N.",
+                                    "206"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    9,
+                                    "BSIT 1-C",
+                                    "Farenas, Kristine Mae M.",
+                                    "207"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    9,
+                                    "BSIT 1-D",
+                                    "Fuentes, Cyra Jel C.",
+                                    "208"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    9,
+                                    "BSIT 1-E",
+                                    "Hilot, Jemar R.",
+                                    "209"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    9,
+                                    "BSIT 1-F",
+                                    "Jampit, Jelou L.",
+                                    "210"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    9,
+                                    "BSIT 1-G",
+                                    "Kinapundan, Riza Jean D.",
+                                    "211"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    9,
+                                    "BSIT 1-H",
+                                    "Lagrosas, Anna Lou M.",
+                                    "214"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    9,
+                                    "BSIT 1-I",
+                                    "Mabaylan, Lani B.",
+                                    "215"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    9,
+                                    "BSIT 1-K",
+                                    "Mabilin, Ivee S.",
+                                    "301"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    9,
+                                    "BSIT 1-L",
+                                    "Melendez, Ashley Jam L.",
+                                    "302"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    9,
+                                    "BSIT 1-M",
+                                    "Suico, Judith S.",
+                                    "303"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    10,
+                                    "BSIT 2A",
+                                    "Tabalba, Mary Jean B.",
+                                    "305"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    10,
+                                    "BSIT 2B",
+                                    "Toong, Nikki Collaine B.",
+                                    "306"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    10,
+                                    "BSIT 2C",
+                                    "Unajan, Erica C.",
+                                    "307"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    10,
+                                    "BSIT 2D",
+                                    "Abaring, Elizandro O.",
+                                    "308"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    10,
+                                    "BSIT 2E",
+                                    "Alcancia, Angela A.",
+                                    "309"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    10,
+                                    "BSIT 2F",
+                                    "Bulawit, Pauline Mitch B.",
+                                    "310"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    10,
+                                    "BEED 2A",
+                                    "Colinares, Jay Ann P.",
+                                    "311"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    10,
+                                    "BEED 2B",
+                                    "Dalondonan, Glaicel D.",
+                                    "312"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    10,
+                                    "BEED 2C",
+                                    "Dalura, Almira M.",
+                                    "313"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    10,
+                                    "BEED 2D",
+                                    "Felicilda, Isy M.",
+                                    "AVR"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    10,
+                                    "BSED 3A",
+                                    "Galagnara, Noelle Phyllis T.",
+                                    "Conference Room"
+                        ],
+                        [
+                                    1,
+                                    0,
+                                    10,
+                                    "BSED 3B",
+                                    "Kinapundan, Jocel Mae A.",
+                                    "Speech Lab"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BEED 2A",
+                                    "Lacdagan, Jesson Mark C.",
+                                    "202"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BEED 2B",
+                                    "Macahilos, Angeline M.",
+                                    "203"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BEED 2C",
+                                    "Obsioma, Emilyn C.",
+                                    "205"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BEED 2D",
+                                    "Paborada, John Rextel M.",
+                                    "206"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BSBA FM 2A",
+                                    "Panoncio, Ken Advil A.",
+                                    "207"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BSBA FM 2B",
+                                    "Pepito, Katrina Zeta S.",
+                                    "208"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BSBA FM 2C",
+                                    "Regoya, Ryan Kim D.",
+                                    "209"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BSBA FM 2D",
+                                    "Saavedra, Jerson M.",
+                                    "210"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BSBA FM 2E",
+                                    "Tumapon, Shayne B.",
+                                    "211"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BSBA FM 2F",
+                                    "Udarbe, Krisha R.",
+                                    "214"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BSBA MM 2A",
+                                    "Velasquez, Niel M.",
+                                    "215"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BSBA MM 2B",
+                                    "Apdian, Cristene Joy A.",
+                                    "301"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BSBA MM 2C",
+                                    "Aque, Angely S.",
+                                    "302"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BSBA MM 2D",
+                                    "Arancana, Mhafaith Grace C.",
+                                    "303"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BSBA MM 2E",
+                                    "Baculina, Mira O.",
+                                    "305"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    11,
+                                    "BSBA MM 2F",
+                                    "Baguio, Marikit T.",
+                                    "306"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    12,
+                                    "BSIT 1-A",
+                                    "Cagas, Steffany V.",
+                                    "307"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    12,
+                                    "BSIT 1-B",
+                                    "Decenilla, Maybelle C.",
+                                    "308"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    12,
+                                    "BSIT 1-C",
+                                    "Fabria, Liezel N.",
+                                    "309"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    12,
+                                    "BSIT 1-D",
+                                    "Farenas, Kristine Mae M.",
+                                    "310"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    12,
+                                    "BSIT 1-E",
+                                    "Fuentes, Cyra Jel C.",
+                                    "311"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    12,
+                                    "BSIT 1-F",
+                                    "Hilot, Jemar R.",
+                                    "312"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    12,
+                                    "BSIT 1-G",
+                                    "Jampit, Jelou L.",
+                                    "313"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    12,
+                                    "BSIT 1-H",
+                                    "Kinapundan, Riza Jean D.",
+                                    "AVR"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    12,
+                                    "BSIT 1-I",
+                                    "Lagrosas, Anna Lou M.",
+                                    "Conference Room"
+                        ],
+                        [
+                                    1,
+                                    1,
+                                    12,
+                                    "BSIT 1-K",
+                                    "Mabaylan, Lani B.",
+                                    "Conference Room - B"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    12,
+                                    "BSIT 1-L",
+                                    "Mabilin, Ivee S.",
+                                    "203"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    12,
+                                    "BSIT 1-M",
+                                    "Melendez, Ashley Jam L.",
+                                    "205"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    12,
+                                    "BSED 2A",
+                                    "Suico, Judith S.",
+                                    "206"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    12,
+                                    "BSED 2B",
+                                    "Tabalba, Mary Jean B.",
+                                    "207"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    12,
+                                    "BSED 2C",
+                                    "Toong, Nikki Collaine B.",
+                                    "208"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    12,
+                                    "BSED 2D",
+                                    "Unajan, Erica C.",
+                                    "209"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSIT 1-A",
+                                    "Abaring, Elizandro O.",
+                                    "210"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSIT 1-B",
+                                    "Alcancia, Angela A.",
+                                    "211"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSIT 1-C",
+                                    "Bulawit, Pauline Mitch B.",
+                                    "214"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSIT 1-D",
+                                    "Colinares, Jay Ann P.",
+                                    "215"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSIT 1-E",
+                                    "Dalondonan, Glaicel D.",
+                                    "301"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSIT 1-F",
+                                    "Dalura, Almira M.",
+                                    "302"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSIT 1-G",
+                                    "Felicilda, Isy M.",
+                                    "303"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSIT 1-H",
+                                    "Galagnara, Noelle Phyllis T.",
+                                    "305"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSIT 1-I",
+                                    "Kinapundan, Jocel Mae A.",
+                                    "306"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    14,
+                                    "BSED 3A",
+                                    "Lacdagan, Jesson Mark C.",
+                                    "307"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    14,
+                                    "BSED 3B",
+                                    "Macahilos, Angeline M.",
+                                    "308"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSED 1A",
+                                    "Paborada, John Rextel M.",
+                                    "310"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSED 1B",
+                                    "Panoncio, Ken Advil A.",
+                                    "311"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSED 1C",
+                                    "Pepito, Katrina Zeta S.",
+                                    "312"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSED 1D",
+                                    "Regoya, Ryan Kim D.",
+                                    "313"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSED 1F",
+                                    "Saavedra, Jerson M.",
+                                    "AVR"
+                        ],
+                        [
+                                    1,
+                                    2,
+                                    13,
+                                    "BSBA FM 1A",
+                                    "Tumapon, Shayne B.",
+                                    "Conference Room"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA FM 1B",
+                                    "Udarbe, Krisha R.",
+                                    "202"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA FM 1C",
+                                    "Velasquez, Niel M.",
+                                    "203"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA FM 1D",
+                                    "Apdian, Cristene Joy A.",
+                                    "205"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA FM 1E",
+                                    "Aque, Angely S.",
+                                    "206"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA FM 1F",
+                                    "Arancana, Mhafaith Grace C.",
+                                    "207"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA FM 1G",
+                                    "Baculina, Mira O.",
+                                    "208"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA FM 1H",
+                                    "Baguio, Marikit T.",
+                                    "209"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA FM 1I",
+                                    "Cagas, Steffany V.",
+                                    "210"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA MM 1A",
+                                    "Decenilla, Maybelle C.",
+                                    "211"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA MM 1B",
+                                    "Fabria, Liezel N.",
+                                    "214"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA MM 1C",
+                                    "Farenas, Kristine Mae M.",
+                                    "215"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA MM 1D",
+                                    "Fuentes, Cyra Jel C.",
+                                    "301"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA MM 1E",
+                                    "Hilot, Jemar R.",
+                                    "302"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA MM 1F",
+                                    "Jampit, Jelou L.",
+                                    "303"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA MM 1H",
+                                    "Kinapundan, Riza Jean D.",
+                                    "305"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    13,
+                                    "BSBA MM 1I",
+                                    "Lagrosas, Anna Lou M.",
+                                    "306"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    15,
+                                    "BSBA MM 2B",
+                                    "Mabaylan, Lani B.",
+                                    "307"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    15,
+                                    "BSED 3B",
+                                    "Mabilin, Ivee S.",
+                                    "308"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    15,
+                                    "BSBA FM 2A",
+                                    "Melendez, Ashley Jam L.",
+                                    "309"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    15,
+                                    "BSBA FM 2B",
+                                    "Suico, Judith S.",
+                                    "310"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    15,
+                                    "BSBA FM 2C",
+                                    "Tabalba, Mary Jean B.",
+                                    "311"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    15,
+                                    "BSBA FM 2D",
+                                    "Toong, Nikki Collaine B.",
+                                    "312"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    15,
+                                    "BSBA FM 2E",
+                                    "Unajan, Erica C.",
+                                    "313"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    15,
+                                    "BSBA FM 2F",
+                                    "Abaring, Elizandro O.",
+                                    "AVR"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    15,
+                                    "BSBA MM 2A",
+                                    "Alcancia, Angela A.",
+                                    "Conference Room"
+                        ],
+                        [
+                                    1,
+                                    3,
+                                    15,
+                                    "BSED 3A",
+                                    "Bulawit, Pauline Mitch B.",
+                                    "Speech Lab"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    15,
+                                    "BSBA MM 2C",
+                                    "Colinares, Jay Ann P.",
+                                    "202"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    15,
+                                    "BSBA MM 2D",
+                                    "Dalondonan, Glaicel D.",
+                                    "203"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    15,
+                                    "BSBA MM 2E",
+                                    "Dalura, Almira M.",
+                                    "205"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    15,
+                                    "BSBA MM 2F",
+                                    "Felicilda, Isy M.",
+                                    "206"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "MM 1I",
+                                    "Farenas, Kristine Mae M.",
+                                    "207"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BEED 1B",
+                                    "Kinapundan, Jocel Mae A.",
+                                    "208"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BEED 1C",
+                                    "Lacdagan, Jesson Mark C.",
+                                    "209"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BEED 1D",
+                                    "Macahilos, Angeline M.",
+                                    "210"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BEED 1F",
+                                    "Obsioma, Emilyn C.",
+                                    "211"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA FM 1A",
+                                    "Paborada, John Rextel M.",
+                                    "214"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA FM 1B",
+                                    "Panoncio, Ken Advil A.",
+                                    "215"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA FM 1C",
+                                    "Pepito, Katrina Zeta S.",
+                                    "301"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA FM 1D",
+                                    "Regoya, Ryan Kim D.",
+                                    "302"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA FM 1E",
+                                    "Saavedra, Jerson M.",
+                                    "303"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA FM 1F",
+                                    "Tumapon, Shayne B.",
+                                    "305"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA FM 1G",
+                                    "Udarbe, Krisha R.",
+                                    "306"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA FM 1H",
+                                    "Velasquez, Niel M.",
+                                    "307"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA FM 1I",
+                                    "Apdian, Cristene Joy A.",
+                                    "308"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA MM 1A",
+                                    "Aque, Angely S.",
+                                    "309"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA MM 1B",
+                                    "Arancana, Mhafaith Grace C.",
+                                    "310"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA MM 1C",
+                                    "Baculina, Mira O.",
+                                    "311"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA MM 1D",
+                                    "Baguio, Marikit T.",
+                                    "312"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA MM 1E",
+                                    "Cagas, Steffany V.",
+                                    "313"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA MM 1F",
+                                    "Decenilla, Maybelle C.",
+                                    "AVR"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BSBA MM 1H",
+                                    "Fabria, Liezel N.",
+                                    "Conference Room"
+                        ],
+                        [
+                                    1,
+                                    4,
+                                    16,
+                                    "BEED 1A",
+                                    "Galagnara, Noelle Phyllis T.",
+                                    "Speech Lab"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BEED 1A",
+                                    "Fuentes, Cyra Jel C.",
+                                    "202"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BEED 1B",
+                                    "Hilot, Jemar R.",
+                                    "203"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BEED 1C",
+                                    "Jampit, Jelou L.",
+                                    "205"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BEED 1D",
+                                    "Kinapundan, Riza Jean D.",
+                                    "206"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BEED 1F",
+                                    "Lagrosas, Anna Lou M.",
+                                    "207"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA FM 1A",
+                                    "Mabaylan, Lani B.",
+                                    "208"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA FM 1B",
+                                    "Mabilin, Ivee S.",
+                                    "209"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA FM 1C",
+                                    "Melendez, Ashley Jam L.",
+                                    "210"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA FM 1D",
+                                    "Suico, Judith S.",
+                                    "211"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA FM 1E",
+                                    "Tabalba, Mary Jean B.",
+                                    "214"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA FM 1F",
+                                    "Toong, Nikki Collaine B.",
+                                    "215"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA FM 1G",
+                                    "Unajan, Erica C.",
+                                    "301"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA FM 1H",
+                                    "Abaring, Elizandro O.",
+                                    "302"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA FM 1I",
+                                    "Alcancia, Angela A.",
+                                    "303"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA MM 1A",
+                                    "Bulawit, Pauline Mitch B.",
+                                    "305"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA MM 1B",
+                                    "Colinares, Jay Ann P.",
+                                    "306"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA MM 1C",
+                                    "Dalondonan, Glaicel D.",
+                                    "307"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA MM 1D",
+                                    "Dalura, Almira M.",
+                                    "308"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA MM 1E",
+                                    "Felicilda, Isy M.",
+                                    "309"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA MM 1F",
+                                    "Galagnara, Noelle Phyllis T.",
+                                    "310"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA MM 1H",
+                                    "Kinapundan, Jocel Mae A.",
+                                    "311"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    17,
+                                    "BSBA MM 1I",
+                                    "Lacdagan, Jesson Mark C.",
+                                    "312"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    13,
+                                    "BSIT 1-K",
+                                    "Macahilos, Angeline M.",
+                                    "313"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    13,
+                                    "BSIT 1-L",
+                                    "Obsioma, Emilyn C.",
+                                    "AVR"
+                        ],
+                        [
+                                    1,
+                                    5,
+                                    13,
+                                    "BSIT 1-M",
+                                    "Paborada, John Rextel M.",
+                                    "Conference Room"
+                        ]
+            ]
+};
+
+        const exams = scheduleData.rows.map(
+            ([
+                dayIndex,
+                timeSlotIndex,
+                subjectIndex,
+                section,
+                proctor,
+                room,
+            ]) => ({
+                dayIndex,
+                timeSlotIndex,
+                subjectIndex,
+                section,
+                proctor,
+                room,
+            })
+        );
+
+        /* =========================================================
+           DOM helpers
+           ========================================================= */
+        const select = (selector) => document.querySelector(selector);
+
+        const escapeHtml = (value) =>
+            String(value).replace(
+                /[&<>"]/g,
+                (character) =>
+                    ({
+                        "&": "&amp;",
+                        "<": "&lt;",
+                        ">": "&gt;",
+                        '"': "&quot;",
+                    })[character]
+            );
+
+        const naturalSort = (a, b) =>
+            a.localeCompare(b, undefined, { numeric: true });
+
+        const getSubjectHue = (subjectIndex) =>
+            Math.round(subjectIndex * 137.508) % 360;
+
+        const getUniqueSortedValues = (items) =>
+            [...new Set(items)].sort(naturalSort);
+
+        /* =========================================================
+           Filter state
+           ========================================================= */
+        const filterState = {
+            dayIndex: 0,
+            proctor: "",
+            room: "",
+            section: "",
+            subjectIndex: null,
+        };
+
+        const filterControls = {
+            proctor: {
+                selector: "#proctorFilter",
+                placeholder: "All proctors",
+            },
+            room: {
+                selector: "#roomFilter",
+                placeholder: "All rooms",
+            },
+            section: {
+                selector: "#sectionFilter",
+                placeholder: "All sections",
+            },
+        };
+
+        function examMatchesFilters(exam) {
+            const matchesProctor =
+                !filterState.proctor || exam.proctor === filterState.proctor;
+
+            const matchesRoom =
+                !filterState.room || exam.room === filterState.room;
+
+            const matchesSection =
+                !filterState.section || exam.section === filterState.section;
+
+            return matchesProctor && matchesRoom && matchesSection;
+        }
+
+        function populateFilter(filterName) {
+            const control = filterControls[filterName];
+            const values = getUniqueSortedValues(
+                exams.map((exam) => exam[filterName])
+            );
+
+            select(control.selector).innerHTML = [
+                `<option value="">${control.placeholder}</option>`,
+                ...values.map(
+                    (value) =>
+                        `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`
+                ),
+            ].join("");
+        }
+
+        function syncFilterControls() {
+            Object.entries(filterControls).forEach(
+                ([filterName, { selector }]) => {
+                    select(selector).value = filterState[filterName];
+                }
+            );
+
+            select("#resetFilters").hidden =
+                !filterState.proctor &&
+                !filterState.room &&
+                !filterState.section &&
+                filterState.subjectIndex === null;
+        }
+
+        /* =========================================================
+           Rendering
+           ========================================================= */
+        function ensureSelectedDayHasResults(filteredExams) {
+            const selectedDayHasResults = filteredExams.some(
+                (exam) => exam.dayIndex === filterState.dayIndex
+            );
+
+            if (selectedDayHasResults || filteredExams.length === 0) {
+                return;
+            }
+
+            const firstDayWithResults = scheduleData.days.findIndex(
+                (_, dayIndex) =>
+                    filteredExams.some((exam) => exam.dayIndex === dayIndex)
+            );
+
+            if (firstDayWithResults >= 0) {
+                filterState.dayIndex = firstDayWithResults;
+            }
+        }
+
+        function renderDayTabs(filteredExams) {
+            select("#dayTabs").innerHTML = scheduleData.days
+                .map((day, dayIndex) => {
+                    const examCount = filteredExams.filter(
+                        (exam) => exam.dayIndex === dayIndex
+                    ).length;
+
+                    return `
+                        <button
+                            type="button"
+                            data-day-index="${dayIndex}"
+                            aria-pressed="${dayIndex === filterState.dayIndex}"
+                        >
+                            <b>${escapeHtml(day.tab)}</b>
+                            <span>${escapeHtml(day.date)}</span>
+                            <i>${examCount}</i>
+                        </button>
+                    `;
+                })
+                .join("");
+        }
+
+        function renderStats(dayExams, rooms) {
+            const uniqueSections = new Set(
+                dayExams.map((exam) => exam.section)
+            ).size;
+
+            const uniqueProctors = new Set(
+                dayExams.map((exam) => exam.proctor)
+            ).size;
+
+            const stat = (value, label) =>
+                `<span><b>${value}</b> ${label}</span>`;
+
+            select("#scheduleStats").innerHTML =
+                stat(dayExams.length, "exams") +
+                stat(uniqueSections, "sections") +
+                stat(uniqueProctors, "proctors") +
+                stat(rooms.length, "rooms");
+        }
+
+        function renderSubjectLegend(dayExams) {
+            const usedSubjectIndexes = [
+                ...new Set(dayExams.map((exam) => exam.subjectIndex)),
+            ].sort((a, b) => a - b);
+
+            select("#subjectLegend").innerHTML = usedSubjectIndexes
+                .map((subjectIndex) => {
+                    const isSelected =
+                        filterState.subjectIndex === subjectIndex;
+
+                    return `
+                        <button
+                            type="button"
+                            class="subject-chip"
+                            style="--subject-hue: ${getSubjectHue(subjectIndex)}"
+                            data-subject-index="${subjectIndex}"
+                            aria-pressed="${isSelected}"
+                        >
+                            ${escapeHtml(scheduleData.subjects[subjectIndex])}
+                        </button>
+                    `;
+                })
+                .join("");
+        }
+
+        function renderScheduleBoard(dayExams, rooms) {
+            if (dayExams.length === 0) {
+                select("#scheduleBoard").innerHTML =
+                    '<p class="empty-message">No exams match these filters.</p>';
+                return;
+            }
+
+            const examByRoomAndTime = new Map(
+                dayExams.map((exam) => [
+                    `${exam.room}|${exam.timeSlotIndex}`,
+                    exam,
+                ])
+            );
+
+            let html = `
+                <div class="schedule-grid">
+                    <div class="grid-header corner-header">Room</div>
+            `;
+
+            scheduleData.slots.forEach((timeSlot, timeSlotIndex) => {
+                const examCount = dayExams.filter(
+                    (exam) => exam.timeSlotIndex === timeSlotIndex
+                ).length;
+
+                html += `
+                    <div class="grid-header">
+                        ${escapeHtml(timeSlot)}
+                        <small>${examCount} exams</small>
+                    </div>
+                `;
+            });
+
+            rooms.forEach((room) => {
+                html += `
+                    <button
+                        type="button"
+                        class="room-button"
+                        data-filter-room="${escapeHtml(room)}"
+                        title="Show only ${escapeHtml(room)}"
+                    >
+                        ${escapeHtml(room)}
+                    </button>
+                `;
+
+                scheduleData.slots.forEach((_, timeSlotIndex) => {
+                    const exam = examByRoomAndTime.get(
+                        `${room}|${timeSlotIndex}`
+                    );
+
+                    if (!exam) {
+                        html += '<div class="empty-slot"></div>';
+                        return;
+                    }
+
+                    const isDimmed =
+                        filterState.subjectIndex !== null &&
+                        filterState.subjectIndex !== exam.subjectIndex;
+
+                    const subjectName =
+                        scheduleData.subjects[exam.subjectIndex];
+
+                    html += `
+                        <div
+                            class="exam-card${isDimmed ? " is-dimmed" : ""}"
+                            style="--subject-hue: ${getSubjectHue(exam.subjectIndex)}"
+                            title="${escapeHtml(subjectName)}"
+                        >
+                            <button
+                                type="button"
+                                class="filter-link"
+                                data-filter-section="${escapeHtml(exam.section)}"
+                            >
+                                ${escapeHtml(exam.section)}
+                            </button>
+
+                            <button
+                                type="button"
+                                class="filter-link"
+                                data-filter-proctor="${escapeHtml(exam.proctor)}"
+                            >
+                                ${escapeHtml(exam.proctor)}
+                            </button>
+
+                            <em>${escapeHtml(subjectName)}</em>
+                        </div>
+                    `;
+                });
+            });
+
+            html += "</div>";
+            select("#scheduleBoard").innerHTML = html;
+        }
+
+        function renderSchedule() {
+            const filteredExams = exams.filter(examMatchesFilters);
+
+            ensureSelectedDayHasResults(filteredExams);
+            syncFilterControls();
+            renderDayTabs(filteredExams);
+
+            const dayExams = filteredExams.filter(
+                (exam) => exam.dayIndex === filterState.dayIndex
+            );
+
+            const rooms = getUniqueSortedValues(
+                dayExams.map((exam) => exam.room)
+            );
+
+            renderStats(dayExams, rooms);
+            renderSubjectLegend(dayExams);
+            renderScheduleBoard(dayExams, rooms);
+        }
+
+        /* =========================================================
+           Filter actions
+           ========================================================= */
+        function toggleTextFilter(filterName, value) {
+            filterState[filterName] =
+                filterState[filterName] === value ? "" : value;
+        }
+
+        function resetFilters() {
+            filterState.proctor = "";
+            filterState.room = "";
+            filterState.section = "";
+            filterState.subjectIndex = null;
+        }
+
+        document.addEventListener("click", (event) => {
+            const button = event.target.closest("button");
+
+            if (!button) {
+                return;
+            }
+
+            const {
+                dayIndex,
+                subjectIndex,
+                filterRoom,
+                filterProctor,
+                filterSection,
+                action,
+            } = button.dataset;
+
+            if (dayIndex !== undefined) {
+                filterState.dayIndex = Number(dayIndex);
+            } else if (subjectIndex !== undefined) {
+                const selectedSubjectIndex = Number(subjectIndex);
+
+                filterState.subjectIndex =
+                    filterState.subjectIndex === selectedSubjectIndex
+                        ? null
+                        : selectedSubjectIndex;
+            } else if (filterRoom !== undefined) {
+                toggleTextFilter("room", filterRoom);
+            } else if (filterProctor !== undefined) {
+                toggleTextFilter("proctor", filterProctor);
+            } else if (filterSection !== undefined) {
+                toggleTextFilter("section", filterSection);
+            } else if (action === "reset-filters") {
+                resetFilters();
+            } else {
+                return;
+            }
+
+            renderSchedule();
+        });
+
+        Object.entries(filterControls).forEach(
+            ([filterName, { selector }]) => {
+                select(selector).addEventListener("change", (event) => {
+                    filterState[filterName] = event.target.value;
+                    renderSchedule();
+                });
+            }
+        );
+
+        /* =========================================================
+           App initialization
+           ========================================================= */
+        Object.keys(filterControls).forEach(populateFilter);
+        renderSchedule();
+    </script>
+</body>
+</html>
